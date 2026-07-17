@@ -62,9 +62,9 @@ binary_sensor:
         input:  true
 
   #I (590) gpio: GPIO[4]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
-  - platform: gpio
-    name: 'Battery Plugged In'
-    pin: GPIO4
+  #- platform: gpio
+  #  name: 'Battery Plugged In'
+  #  pin: GPIO4
 
   #I (562) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:4
   - platform: gpio
@@ -182,3 +182,15 @@ uart:
 sensor:
   - platform: uptime
     name: Uptime
+  - platform: adc
+    id: battery_adc_voltage
+    name: "Battery ADC Voltage"
+    pin: GPIO4
+    attenuation: 12db
+    update_interval: 30s
+    accuracy_decimals: 3
+    entity_category: diagnostic
+    filters:
+      - sliding_window_moving_average:
+          window_size: 5
+          send_every: 1
