@@ -88,12 +88,17 @@ binary_sensor:
 
   #I (553) gpio: GPIO[18]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0
   - platform: gpio
+    id: is_food_sensed
     pin:
       number: GPIO18
       mode:
         pullup: true
         input:  true
-    name: Food Sensor
+    name: Food Sensed
+    device_class: occupancy
+    filters:
+      delayed_on: 100ms
+      delayed_off: 100ms
 
   #I (503) gpio: GPIO[19]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:4
   - platform: gpio
@@ -112,13 +117,22 @@ output:
       number: GPIO3
       mode:
         output: true
+  - platform: ledc
+    id: gpio10_red_pwm
+    pin: GPIO10
+    frequency: 1220Hz
 
 light:
   - platform: status_led
     id: gpio3_status_light
-    name: "GPIO3 Status Light"
+    name: "Status Light"
     output: gpio3_status_led_output
     internal: false
+  - platform: monochromatic
+    id: gpio10_red_light
+    name: "Red Alarm LED"
+    output: gpio10_red_pwm
+    restore_mode: ALWAYS_OFF
 
 switch:
   - platform: restart
@@ -143,16 +157,17 @@ switch:
     restore_mode: ALWAYS_OFF
 
   #I (516) gpio: GPIO[10]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0
-  - platform: gpio
-    name: 'Alarm LED'
-    pin:
-      number: GPIO10
-      mode:
-        output: true
-        pulldown: true
+#  - platform: gpio
+#    name: 'Alarm LED'
+#    pin:
+#      number: GPIO10
+#      mode:
+#        output: true
+#        pulldown: true
 
   #I (580) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
   - platform: gpio
+    id: food_sensor_power
     name: 'Enable Food Sensor'
     pin:
       number: GPIO9
