@@ -54,12 +54,14 @@ binary_sensor:
 
   #I (571) gpio: GPIO[0]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:4
   - platform: gpio
-    name: Battery
+    id: battery_power_connected
+    name: Battery Power Connected
     pin:
       number: GPIO0
       mode:
         pullup: true
         input:  true
+    entity_category: diagnostic
 
   #I (590) gpio: GPIO[4]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
   #- platform: gpio
@@ -68,13 +70,15 @@ binary_sensor:
 
   #I (562) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:4
   - platform: gpio
+    id: wall_power_connected
+    name: Wall Power Connected
     pin:
       number: GPIO5
       inverted: true
       mode:
         pullup: true
         input:  true
-    name: Mains Connected
+    entity_category: diagnostic
 
   #I (543) gpio: GPIO[8]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:4         # SENSOR
   - platform: gpio
@@ -183,8 +187,8 @@ sensor:
   - platform: uptime
     name: Uptime
   - platform: adc
-    id: battery_adc_voltage
-    name: "Battery ADC Voltage"
+    id: battery_sense_voltage
+    name: "Battery Sense Voltage"
     pin: GPIO4
     attenuation: 12db
     update_interval: 30s
@@ -194,3 +198,48 @@ sensor:
       - sliding_window_moving_average:
           window_size: 5
           send_every: 1
+  - platform: template
+    id: battery_percentage
+    name: "Battery Percentage"
+    unit_of_measurement: "%"
+    device_class: battery
+    state_class: measurement
+    accuracy_decimals: 0
+    update_interval: 30s
+    lambda: |-
+      const float v = id(battery_sense_voltage).state;
+
+      // Placeholder calibration values. Replace after measuring.
+      const float empty_v = 1.80;
+      const float full_v = 2.35;
+
+      if (isnan(v)) return NAN;
+
+      float pct = (v - empty_v) * 100.0f / (full_v - empty_v);
+      if (pct < 0.0f) pct = 0.0f;
+      if (pct > 100.0f) pct = 100.0f;
+      return pct;
+
+text_sensor:
+  - platform: template
+    id: battery_debug_state
+    name: "Battery Debug State"
+    update_interval: 30s
+    lambda: |-
+      const float v = id(battery_sense_voltage).state;
+      if (isnan(v)) return std::string("Unknown");
+      if (v < 0.2) return std::string("No battery / no voltage");
+      return std::string("Battery voltage present");
+  - platform: template
+    id: power_source
+    name: "Power Source"
+    icon: mdi:power-plug-battery
+    update_interval: 10s
+    lambda: |-
+      if (id(wall_power_connected).state) {
+        return std::string("Wall Power");
+      }
+      if (id(battery_power_connected).state) {
+        return std::string("Battery");
+      }
+      return std::string("Unknown");
