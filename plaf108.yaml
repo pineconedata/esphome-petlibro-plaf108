@@ -105,11 +105,20 @@ binary_sensor:
     name: Reset Button
 
 #I (530) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
-status_led:
-  pin:
-    number: GPIO3
-    mode:
-      output: true
+output:
+  - platform: gpio
+    id: gpio3_status_led_output
+    pin:
+      number: GPIO3
+      mode:
+        output: true
+
+light:
+  - platform: status_led
+    id: gpio3_status_light
+    name: "GPIO3 Status Light"
+    output: gpio3_status_led_output
+    internal: false
 
 switch:
   - platform: restart
