@@ -1,9 +1,14 @@
 esphome:
   name: plaf108-a
   friendly_name: Pet Feeder A
+  platformio_options:
+    board_build.flash_mode: dio
+    board_build.f_flash: 40000000L
 
 esp32:
   board: esp32-c3-devkitm-1
+  variant: ESP32C3
+  flash_size: 4MB
   framework:
     type: arduino
 
