@@ -25,6 +25,11 @@ wifi:
 
 captive_portal:
 
+api:
+
+ota:
+  platform: esphome
+
 web_server:
 
 binary_sensor:
