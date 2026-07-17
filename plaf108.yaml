@@ -31,10 +31,11 @@ api:
 
 ota: 
   platform: esphome
+  password: !secret ota_password
 
 web_server:
 
-# ### Outputs 
+# ### Outputs
 output:
   - platform: gpio
     id: gpio3_status_led_output
@@ -70,9 +71,9 @@ switch:
   - platform: gpio
     id: motor_right
     name: 'Motor Right'
-    pin: 
+    pin:
       number: GPIO6
-      mode: 
+      mode:
         output: true
     restore_mode: ALWAYS_OFF
     interlock: [motor_left]
@@ -81,9 +82,9 @@ switch:
   - platform: gpio
     id: motor_left
     name: 'Motor Left'
-    pin: 
+    pin:
       number: GPIO7
-      mode: 
+      mode:
         output: true
     restore_mode: ALWAYS_OFF
     interlock: [motor_right]
@@ -92,17 +93,17 @@ switch:
   - platform: gpio
     id: food_sensor_power
     name: 'Food Sensor Power'
-    pin: 
+    pin:
       number: GPIO9
-      mode: 
+      mode:
         output: true
     restore_mode: ALWAYS_ON
 
-# ### Binary Sensors 
+# ### Binary Sensors
 binary_sensor:
   - platform: gpio
     name: "GPIO1 Unknown"
-    pin: 
+    pin:
       number: GPIO1
       mode:
         output: true
@@ -119,31 +120,31 @@ binary_sensor:
   - platform: gpio
     id: battery_power_connected
     name: Battery Power Connected
-    pin: 
+    pin:
       number: GPIO0
-      mode: 
+      mode:
         pullup: true
-        input:  true  
+        input:  true
     entity_category: diagnostic
 
   - platform: gpio
     id: wall_power_connected
     name: Wall Power Connected
-    pin: 
+    pin:
       number: GPIO5
       inverted: true
-      mode: 
+      mode:
         pullup: true
         input:  true
     entity_category: diagnostic
-                                                                
+
   - platform: gpio
     id: motor_rotation_sensor
     name: Motor Rotation Sensor
-    pin: 
+    pin:
       inverted: true
       number: GPIO8
-      mode: 
+      mode:
         pullup: true
         input:  true
 
@@ -162,10 +163,10 @@ binary_sensor:
   - platform: gpio
     id: reset_button
     name: Reset Button
-    pin: 
+    pin:
       number: GPIO19
       inverted: true
-      mode: 
+      mode:
         pullup: true
         input: true
     entity_category: diagnostic
@@ -199,6 +200,7 @@ sensor:
     lambda: |-
       const float v = id(battery_sense_voltage).state;
 
+      // Placeholder calibration values. Replace after measuring.
       const float empty_v = 1.80;
       const float full_v = 2.35;
 
