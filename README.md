@@ -4,6 +4,8 @@ ESPHome firmware for the Petlibro Air WiFi Feeder (Model Number PLAF108).
 
 This project replaces the feeder's stock firmware with locally-managed [ESPHome](https://esphome.io/) firmware. It exposes the feeder's controls and sensors without requiring the Petlibro app, a Petlibro account, or an ongoing connection to Petlibro's servers. It also integrates natively with [Home Assistant](https://www.home-assistant.io/).
 
+A full guide for this process, including photos and troubleshooting steps, is available [on my website](https://www.pineconedata.com/2026-06-19-flashing-esphome-on-wifi-pet-feeder/).
+
 ## Warning
 Installing this firmware requires opening the feeder and flashing its ESP32-C3 microcontroller. This can disable the Petlibro cloud functionality and can potentially make the feeder unusable if something goes wrong. Make a complete factory firmware backup before writing anything to the device. Do not rely on this firmware as the only way to feed your animal without thorough testing.
 
