@@ -89,16 +89,15 @@ binary_sensor:
   #I (553) gpio: GPIO[18]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0
   - platform: gpio
     id: is_food_sensed
+    name: "Food Sensed"
     pin:
       number: GPIO18
       mode:
+        input: true
         pullup: true
-        input:  true
-    name: Food Sensed
-    device_class: occupancy
     filters:
-      delayed_on: 100ms
-      delayed_off: 100ms
+      - delayed_on: 100ms
+      - delayed_off: 500ms
 
   #I (503) gpio: GPIO[19]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:4
   - platform: gpio
