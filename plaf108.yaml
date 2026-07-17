@@ -203,9 +203,8 @@ sensor:
     lambda: |-
       const float v = id(battery_sense_voltage).state;
 
-      // Placeholder calibration values. Replace after measuring.
-      const float empty_v = 1.80;
-      const float full_v = 2.35;
+      const float empty_v = 1.650;
+      const float full_v = 2.095;
 
       if (isnan(v)) return NAN;
 
